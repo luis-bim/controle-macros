@@ -3,70 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luís Fitness</title>
+    <title>MEDIDOR DE PROTEINA</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; max-width: 500px; margin: 0 auto; padding: 15px; background-color: #f0f2f5; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
-        h2 { text-align: center; color: #1a73e8; margin-top: 0; }
+        :root {
+            --fundo-preto: #0A0A0A;
+            --superficie-cinza: #161616;
+            --ciano-eletrico: #00E5FF;
+            --borda-fina: #404040;
+            --fonte-mono: 'JetBrains Mono', 'Roboto Mono', monospace;
+            --fonte-sans: 'Inter', sans-serif;
+        }
 
-        .setup-meta { display: flex; align-items: center; justify-content: space-between; background: #e8f0fe; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; }
-        .setup-meta input { width: 70px; padding: 5px; border-radius: 5px; border: 1px solid #ccc; text-align: center; }
+        * { box-sizing: border-box; border-radius: 0px !important; }
 
-        /* Contadores em destaque */
-        .status-container { display: flex; gap: 10px; margin-bottom: 15px; }
-        .status-box { flex: 1; padding: 10px; border-radius: 10px; text-align: center; color: white; }
-        .bg-blue { background-color: #1a73e8; }
-        .bg-gray { background-color: #6c757d; }
-        .status-box span { display: block; font-size: 12px; opacity: 0.9; }
-        .status-box strong { font-size: 18px; }
+        body { 
+            background-color: var(--fundo-preto); 
+            color: #FFFFFF; 
+            font-family: var(--fonte-sans); 
+            max-width: 480px; 
+            margin: 0 auto; 
+            padding: 10px;
+            font-size: 13px;
+        }
 
-        /* Ajuste para Mobile */
-        .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .row { display: flex; gap: 8px; }
-        select { flex: 2; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; width: 100%; }
-        input[type="number"] { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
-        
-        .btn-add { background-color: #1a73e8; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
+        h2 { 
+            font-family: var(--fonte-mono); 
+            font-size: 1rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--borda-fina);
+            padding-bottom: 10px;
+            color: var(--ciano-eletrico);
+        }
 
-        .chart-container { position: relative; margin: 0 auto; height: 200px; width: 200px; }
+        .card { 
+            background: var(--superficie-cinza); 
+            padding: 15px; 
+            border: 1px solid var(--borda-fina);
+        }
+
+        .config-meta {
+            font-family: var(--fonte-mono);
+            font-size: 11px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .config-meta input { background: var(--fundo-preto); color: white; padding: 4px; border: 1px solid var(--borda-fina); width: 60px; height: auto; font-size: 12px; }
+
+        .status-container { display: flex; margin-bottom: 15px; border: 1px solid var(--borda-fina); }
+        .status-box { flex: 1; padding: 10px; border-right: 1px solid var(--borda-fina); }
+        .status-box:last-child { border-right: none; }
+        .status-box span { display: block; font-family: var(--fonte-mono); font-size: 9px; text-transform: uppercase; color: #888; }
+        .status-box strong { font-family: var(--fonte-mono); font-size: 1.2rem; color: var(--ciano-eletrico); }
+
+        .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .row { display: flex; border: 1px solid var(--borda-fina); }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
-        th, td { border-bottom: 1px solid #eee; padding: 10px 5px; text-align: left; }
-        
-        .btn-reset { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 10px; border-radius: 8px; width: 100%; margin-top: 20px; cursor: pointer; }
+        select, input { background: var(--fundo-preto); color: white; border: none; padding: 12px; font-family: var(--fonte-mono); font-size: 14px; }
+        select { flex: 2; border-right: 1px solid var(--borda-fina); width: 100%; }
+        input[type="number"] { flex: 1; width: 60px; }
+
+        .btn-add { 
+            background-color: var(--ciano-eletrico); 
+            color: var(--fundo-preto); 
+            border: none; 
+            padding: 15px; 
+            font-weight: bold; 
+            font-family: var(--fonte-mono);
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .chart-container { position: relative; margin: 0 auto; height: 150px; width: 250px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-family: var(--fonte-mono); }
+        th { text-align: left; font-size: 10px; color: #888; padding: 8px 5px; text-transform: uppercase; border-bottom: 1px solid var(--borda-fina); }
+        td { border-bottom: 1px solid var(--borda-fina); padding: 8px 5px; color: #CCC; cursor: pointer; }
+        td:hover { color: var(--ciano-eletrico); background: #1a1a1a; }
+
+        .btn-reset { background: transparent; color: #666; border: 1px solid var(--borda-fina); padding: 8px; width: 100%; margin-top: 20px; font-family: var(--fonte-mono); font-size: 10px; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Minha Proteína</h2>
+    <h2>MEDIDOR DE PROTEINA</h2>
 
-    <div class="setup-meta">
-        <span>Meta Diária:</span>
+    <div class="config-meta">
+        <span>META DIARIA (G):</span>
         <input type="number" id="meta-diaria" onchange="salvarMeta()">
     </div>
 
     <div class="status-container">
-        <div class="status-box bg-blue">
-            <span>Já foram</span>
-            <strong id="info-consumido">0g</strong>
+        <div class="status-box">
+            <span>CONSUMIDO</span>
+            <strong id="info-consumido">0.0</strong>
         </div>
-        <div class="status-box bg-gray">
-            <span>Faltam</span>
-            <strong id="info-falta">0g</strong>
+        <div class="status-box">
+            <span>RESTANTE</span>
+            <strong id="info-falta">0.0</strong>
         </div>
     </div>
     
     <div class="input-group">
         <div class="row">
-            <select id="select-alimento"><option>Carregando...</option></select>
-            <input type="number" id="qtd-gramas" placeholder="g" inputmode="decimal">
+            <select id="select-alimento"><option>CARREGANDO...</option></select>
+            <input type="number" id="qtd-gramas" placeholder="G" inputmode="decimal">
         </div>
-        <button class="btn-add" onclick="adicionarEntrada()">Adicionar Alimento</button>
+        <button class="btn-add" onclick="adicionarEntrada()">ADICIONAR REGISTRO</button>
     </div>
 
     <div class="chart-container">
@@ -75,12 +123,12 @@
 
     <table>
         <thead>
-            <tr><th>Alimento</th><th>Qtd</th><th>Prot</th></tr>
+            <tr><th>ITEM (CLIQUE P/ REMOVER)</th><th>PESO</th><th>PROT</th></tr>
         </thead>
         <tbody id="tabela-corpo"></tbody>
     </table>
 
-    <button class="btn-reset" onclick="resetarDados()">Zerar Dia</button>
+    <button class="btn-reset" onclick="resetarDados()">APAGAR REGISTROS DO DIA</button>
 </div>
 
 <script>
@@ -100,16 +148,16 @@
             const aba = workbook.Sheets["PROTEINA"];
             const json = XLSX.utils.sheet_to_json(aba, { header: "A" });
             const select = document.getElementById('select-alimento');
-            select.innerHTML = '<option value="">Alimento...</option>';
+            select.innerHTML = '<option value="">SELECIONE...</option>';
             json.forEach((linha, index) => {
                 if (index > 0 && linha.A && linha.D) {
                     baseDados[linha.A] = linha.D;
                     let opt = document.createElement('option');
-                    opt.value = linha.A; opt.innerHTML = linha.A;
+                    opt.value = linha.A; opt.innerHTML = linha.A.toUpperCase();
                     select.appendChild(opt);
                 }
             });
-        } catch (e) { alert("Erro ao carregar Excel"); }
+        } catch (e) { console.error("ERRO DE LEITURA"); }
     }
 
     function salvarMeta() {
@@ -129,19 +177,31 @@
         atualizarInterface();
     }
 
+    function removerItem(index) {
+        const item = historico[index];
+        if(confirm(`Remover ${item.alimento.toUpperCase()} da lista de itens?`)) {
+            historico.splice(index, 1);
+            localStorage.setItem('consumoProteina', JSON.stringify(historico));
+            atualizarInterface();
+        }
+    }
+
     function atualizarInterface() {
         const corpo = document.getElementById('tabela-corpo');
         corpo.innerHTML = "";
         let total = 0;
-        historico.forEach(item => {
+        historico.forEach((item, index) => {
             total += item.proteina;
-            corpo.innerHTML += `<tr><td>${item.alimento}</td><td>${item.gramas}g</td><td>${item.proteina}g</td></tr>`;
+            corpo.innerHTML += `<tr onclick="removerItem(${index})">
+                <td>${item.alimento.toUpperCase()}</td>
+                <td>${item.gramas}G</td>
+                <td>${item.proteina}G</td>
+            </tr>`;
         });
 
         const falta = Math.max(0, meta - total);
-        document.getElementById('info-consumido').innerText = total.toFixed(1) + "g";
-        document.getElementById('info-falta').innerText = falta.toFixed(1) + "g";
-
+        document.getElementById('info-consumido').innerText = total.toFixed(1);
+        document.getElementById('info-falta').innerText = falta.toFixed(1);
         atualizarGrafico(total, falta);
     }
 
@@ -153,16 +213,28 @@
             data: {
                 datasets: [{
                     data: [total, falta],
-                    backgroundColor: ['#1a73e8', '#e8f0fe'],
-                    borderWidth: 0, circumference: 270, rotation: 225, cutout: '80%'
+                    backgroundColor: ['#00E5FF', '#161616'],
+                    borderColor: '#404040',
+                    borderWidth: 1,
+                    circumference: 180,
+                    rotation: 270,
+                    cutout: '80%'
                 }]
             },
-            options: { plugins: { legend: { display: false } }, maintainAspectRatio: false }
+            options: { 
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                maintainAspectRatio: false,
+                animation: false
+            }
         });
     }
 
     function resetarDados() {
-        if(confirm("Zerar?")) { historico = []; localStorage.removeItem('consumoProteina'); atualizarInterface(); }
+        if(confirm("CONFIRMA A LIMPEZA DE DADOS?")) { 
+            historico = []; 
+            localStorage.removeItem('consumoProteina'); 
+            atualizarInterface(); 
+        }
     }
 
     carregarExcel();

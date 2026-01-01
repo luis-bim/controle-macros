@@ -7,31 +7,37 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; color: #333; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { text-align: center; margin-bottom: 25px; color: #1a73e8; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; max-width: 500px; margin: 0 auto; padding: 15px; background-color: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        .setup-meta { display: flex; align-items: center; justify-content: space-between; background: #e8f0fe; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        .setup-meta input { width: 80px; text-align: center; font-weight: bold; }
+        h2 { text-align: center; color: #1a73e8; margin-top: 0; }
 
+        .setup-meta { display: flex; align-items: center; justify-content: space-between; background: #e8f0fe; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; }
+        .setup-meta input { width: 70px; padding: 5px; border-radius: 5px; border: 1px solid #ccc; text-align: center; }
+
+        /* Contadores em destaque */
+        .status-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .status-box { flex: 1; padding: 10px; border-radius: 10px; text-align: center; color: white; }
+        .bg-blue { background-color: #1a73e8; }
+        .bg-gray { background-color: #6c757d; }
+        .status-box span { display: block; font-size: 12px; opacity: 0.9; }
+        .status-box strong { font-size: 18px; }
+
+        /* Ajuste para Mobile */
         .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        select, input { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
+        .row { display: flex; gap: 8px; }
+        select { flex: 2; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; width: 100%; }
+        input[type="number"] { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
         
-        .row { display: flex; gap: 10px; }
-        .row select { flex: 2; }
-        .row input { flex: 1; }
+        .btn-add { background-color: #1a73e8; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
 
-        button { padding: 12px; cursor: pointer; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        .btn-add { background-color: #1a73e8; color: white; width: 100%; }
-        .btn-add:hover { background-color: #1557b0; }
-        .btn-reset { background-color: #fff; color: #dc3545; border: 1px solid #dc3545; margin-top: 30px; width: 100%; }
-        .btn-reset:hover { background-color: #fff5f5; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 25px; font-size: 14px; }
-        th, td { border-bottom: 1px solid #eee; padding: 12px 8px; text-align: left; }
-        .total-row { font-weight: bold; background: #f8f9fa; }
-
-        .chart-container { position: relative; margin: 20px auto; height: 250px; width: 250px; }
+        .chart-container { position: relative; margin: 0 auto; height: 200px; width: 200px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+        th, td { border-bottom: 1px solid #eee; padding: 10px 5px; text-align: left; }
+        
+        .btn-reset { background: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 10px; border-radius: 8px; width: 100%; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -40,16 +46,25 @@
     <h2>Minha Proteína</h2>
 
     <div class="setup-meta">
-        <span>Objetivo Diário (g):</span>
-        <input type="number" id="meta-diaria" value="150" onchange="salvarMeta()">
+        <span>Meta Diária:</span>
+        <input type="number" id="meta-diaria" onchange="salvarMeta()">
+    </div>
+
+    <div class="status-container">
+        <div class="status-box bg-blue">
+            <span>Já foram</span>
+            <strong id="info-consumido">0g</strong>
+        </div>
+        <div class="status-box bg-gray">
+            <span>Faltam</span>
+            <strong id="info-falta">0g</strong>
+        </div>
     </div>
     
     <div class="input-group">
         <div class="row">
-            <select id="select-alimento">
-                <option value="">Carregando...</option>
-            </select>
-            <input type="number" id="qtd-gramas" placeholder="g">
+            <select id="select-alimento"><option>Carregando...</option></select>
+            <input type="number" id="qtd-gramas" placeholder="g" inputmode="decimal">
         </div>
         <button class="btn-add" onclick="adicionarEntrada()">Adicionar Alimento</button>
     </div>
@@ -60,16 +75,12 @@
 
     <table>
         <thead>
-            <tr>
-                <th>Alimento</th>
-                <th>Qtd</th>
-                <th>Prot</th>
-            </tr>
+            <tr><th>Alimento</th><th>Qtd</th><th>Prot</th></tr>
         </thead>
         <tbody id="tabela-corpo"></tbody>
     </table>
 
-    <button class="btn-reset" onclick="resetarDados()">Resetar Dia</button>
+    <button class="btn-reset" onclick="resetarDados()">Zerar Dia</button>
 </div>
 
 <script>
@@ -88,21 +99,17 @@
             const workbook = XLSX.read(data, { type: 'array' });
             const aba = workbook.Sheets["PROTEINA"];
             const json = XLSX.utils.sheet_to_json(aba, { header: "A" });
-
             const select = document.getElementById('select-alimento');
-            select.innerHTML = '<option value="">Selecione...</option>';
-
+            select.innerHTML = '<option value="">Alimento...</option>';
             json.forEach((linha, index) => {
-                if (index === 0) return;
-                if(linha.A && linha.D) {
+                if (index > 0 && linha.A && linha.D) {
                     baseDados[linha.A] = linha.D;
                     let opt = document.createElement('option');
-                    opt.value = linha.A;
-                    opt.innerHTML = linha.A;
+                    opt.value = linha.A; opt.innerHTML = linha.A;
                     select.appendChild(opt);
                 }
             });
-        } catch (e) { console.error("Erro ao carregar Excel", e); }
+        } catch (e) { alert("Erro ao carregar Excel"); }
     }
 
     function salvarMeta() {
@@ -115,10 +122,8 @@
         const alimento = document.getElementById('select-alimento').value;
         const gramas = parseFloat(document.getElementById('qtd-gramas').value);
         if (!alimento || !gramas) return;
-
-        const proteinaResult = (gramas * baseDados[alimento]).toFixed(2);
-        historico.push({ alimento, gramas, proteina: parseFloat(proteinaResult) });
-        
+        const prot = parseFloat((gramas * baseDados[alimento]).toFixed(1));
+        historico.push({ alimento, gramas, proteina: prot });
         localStorage.setItem('consumoProteina', JSON.stringify(historico));
         document.getElementById('qtd-gramas').value = "";
         atualizarInterface();
@@ -127,56 +132,41 @@
     function atualizarInterface() {
         const corpo = document.getElementById('tabela-corpo');
         corpo.innerHTML = "";
-        let totalConsumido = 0;
-
+        let total = 0;
         historico.forEach(item => {
-            totalConsumido += item.proteina;
-            corpo.innerHTML += `<tr><td>${item.alimento}</td><td>${item.gramas}g</td><td>${item.proteina.toFixed(1)}g</td></tr>`;
+            total += item.proteina;
+            corpo.innerHTML += `<tr><td>${item.alimento}</td><td>${item.gramas}g</td><td>${item.proteina}g</td></tr>`;
         });
 
-        atualizarGrafico(totalConsumido);
+        const falta = Math.max(0, meta - total);
+        document.getElementById('info-consumido').innerText = total.toFixed(1) + "g";
+        document.getElementById('info-falta').innerText = falta.toFixed(1) + "g";
+
+        atualizarGrafico(total, falta);
     }
 
-    function atualizarGrafico(total) {
+    function atualizarGrafico(total, falta) {
         const ctx = document.getElementById('graficoProteina').getContext('2d');
-        const falta = Math.max(0, meta - total);
-        
         if (chart) chart.destroy();
-
         chart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Consumido (g)', 'Faltam (g)'],
                 datasets: [{
-                    data: [total.toFixed(1), falta.toFixed(1)],
+                    data: [total, falta],
                     backgroundColor: ['#1a73e8', '#e8f0fe'],
-                    borderWidth: 0,
-                    circumference: 270,
-                    rotation: 225,
-                    cutout: '80%'
+                    borderWidth: 0, circumference: 270, rotation: 225, cutout: '80%'
                 }]
             },
-            options: {
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { enabled: true }
-                },
-                maintainAspectRatio: false
-            }
+            options: { plugins: { legend: { display: false } }, maintainAspectRatio: false }
         });
     }
 
     function resetarDados() {
-        if(confirm("Zerar consumo de hoje?")) {
-            historico = [];
-            localStorage.removeItem('consumoProteina');
-            atualizarInterface();
-        }
+        if(confirm("Zerar?")) { historico = []; localStorage.removeItem('consumoProteina'); atualizarInterface(); }
     }
 
     carregarExcel();
     atualizarInterface();
 </script>
-
 </body>
 </html>

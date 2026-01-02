@@ -28,7 +28,7 @@ export function renderDieta() {
                 <button class="btn-add" id="add-registro">ADICIONAR REGISTRO</button>
             </div>
             <table>
-                <thead><tr><th align="left">ITEM</th><th align="left">PESO</th><th align="left">PROTEINA</th><th style="width:40px"></th></tr></thead>
+                <thead><tr><th>ITEM</th><th>PESO</th><th>PROT.</th><th style="width:40px"></th></tr></thead>
                 <tbody id="tabela-corpo"></tbody>
             </table>
             <button class="btn-reset" id="btn-reset-dieta">APAGAR REGISTROS DO DIA</button>
@@ -76,8 +76,8 @@ export async function initDieta() {
     });
 
     window.removerItemDieta = (i) => {
-        const nomeItem = historico[i].alimento.toUpperCase();
-        if(confirm(`Remover ${nomeItem} da lista?`)) {
+        const nome = historico[i].alimento.toUpperCase();
+        if(confirm(`Remover ${nome} da lista?`)) {
             historico.splice(i, 1);
             localStorage.setItem('consumoProteina', JSON.stringify(historico));
             atualizarInterface();

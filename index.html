@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FITNESS_OS</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        :root { --fundo: #0A0A0A; --cyan: #00E5FF; }
+        body { background-color: var(--fundo) !important; color: #FFFFFF !important; margin: 0; font-family: monospace; }
+        #app-content { padding: 10px; }
+    </style>
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -15,6 +20,6 @@
 
     <main id="app-content"></main>
 
-    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

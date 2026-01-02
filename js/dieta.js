@@ -52,7 +52,7 @@ export async function initDieta() {
                 }
             });
         }
-    } catch(e) { console.error("ERRO_EXCEL"); }
+    } catch(e) { console.error("ERRO AO CARREGAR EXCEL"); }
 
     document.getElementById('meta-diaria')?.addEventListener('change', (e) => {
         meta = e.target.value;
@@ -64,7 +64,8 @@ export async function initDieta() {
         const ali = document.getElementById('select-alimento').value;
         const gra = parseFloat(document.getElementById('qtd-gramas').value);
         if(!ali || !gra) return;
-        historico.push({ alimento: ali, gramas: gra, proteina: parseFloat((gra * baseDados[ali]).toFixed(1)) });
+        const protItem = parseFloat((gra * baseDados[ali]).toFixed(1));
+        historico.push({ alimento: ali, gramas: gra, proteina: protItem });
         localStorage.setItem('consumoProteina', JSON.stringify(historico));
         document.getElementById('qtd-gramas').value = "";
         atualizarInterface();
@@ -75,11 +76,9 @@ export async function initDieta() {
     });
 
     window.removerItemDieta = (i) => {
-        if(confirm(`REMOVER ${historico[i].alimento.toUpperCase()}?`)) {
-            historico.splice(i, 1);
-            localStorage.setItem('consumoProteina', JSON.stringify(historico));
-            atualizarInterface();
-        }
+        historico.splice(i, 1);
+        localStorage.setItem('consumoProteina', JSON.stringify(historico));
+        atualizarInterface();
     };
 
     function atualizarInterface() {
@@ -96,9 +95,8 @@ export async function initDieta() {
                 <td style="text-align:right"><span class="btn-del" onclick="removerItemDieta(${i})">X</span></td>
             </tr>`;
         });
-        const falta = Math.max(0, meta - total);
         document.getElementById('info-consumido').innerText = total.toFixed(1);
-        document.getElementById('info-falta').innerText = falta.toFixed(1);
+        document.getElementById('info-falta').innerText = Math.max(0, meta - total).toFixed(1);
         const percent = Math.min(1, total / meta);
         document.getElementById('gauge-fill').style.strokeDashoffset = 314.15 * (1 - percent);
     }

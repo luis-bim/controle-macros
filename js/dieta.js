@@ -16,9 +16,9 @@ export function renderDieta() {
                     <path id="gauge-fill" class="gauge-fill" d="M 10,110 A 100,100 0 0,1 210,110" />
                 </svg>
             </div>
-            <div class="config-meta" style="display:flex; justify-content:space-between; margin: 10px 0 20px 0; font-family:var(--fonte-mono); font-size:11px;">
+            <div class="config-meta">
                 <span>META DIARIA (g):</span>
-                <input type="number" id="meta-diaria" value="${meta}" style="background:var(--fundo-preto); color:white; border:1px solid var(--borda-fina); width:42px; text-align:center;">
+                <input type="number" id="meta-diaria" value="${meta}">
             </div>
             <div class="input-group">
                 <div class="row">

@@ -1,5 +1,5 @@
 # FITNESS_OS - App de Controle de Macros e Treino
-
+```text
 ## 🎯 Objetivo
 Aplicação web modular para monitoramento de dieta (foco em proteínas via Medidor de Arco) e registro de treinos, projetada com estética industrial de alto contraste (Obsidian & Cyan).
 
@@ -9,7 +9,6 @@ Aplicação web modular para monitoramento de dieta (foco em proteínas via Medi
 - **Persistência de Dados:** `localStorage` do navegador.
 
 ## 📂 Estrutura de Pastas
-```text
 /
 ├── index.html          # Ponto de entrada e moldura das abas.
 ├── css/

@@ -12,8 +12,8 @@ export function renderDieta() {
             </div>
             <div class="gauge-container">
                 <svg class="gauge-svg" viewBox="0 0 220 120">
-                    <path class="gauge-bg" d="M 10,110 A 100,100 0 0,1 210,110" />
-                    <path id="gauge-fill" class="gauge-fill" d="M 10,110 A 100,100 0 0,1 210,110" />
+                    <path class="gauge-bg" fill="none" d="M 10,110 A 100,100 0 0,1 210,110" />
+                    <path id="gauge-fill" class="gauge-fill" fill="none" d="M 10,110 A 100,100 0 0,1 210,110" />
                 </svg>
             </div>
             <div class="config-meta">
@@ -23,12 +23,12 @@ export function renderDieta() {
             <div class="input-group">
                 <div class="row">
                     <select id="select-alimento"><option>CARREGANDO...</option></select>
-                    <input type="number" id="qtd-gramas" placeholder="g" inputmode="decimal">
+                    <input type="number" id="qtd-gramas" placeholder="g">
                 </div>
                 <button class="btn-add" id="add-registro">ADICIONAR REGISTRO</button>
             </div>
             <table>
-                <thead><tr><th>ITEM</th><th>PESO</th><th>PROT.</th><th style="width:40px"></th></tr></thead>
+                <thead><tr><th>ITEM</th><th>PESO</th><th>PROT.</th><th></th></tr></thead>
                 <tbody id="tabela-corpo"></tbody>
             </table>
             <button class="btn-reset" id="btn-reset-dieta">APAGAR REGISTROS DO DIA</button>
@@ -76,8 +76,8 @@ export async function initDieta() {
     });
 
     window.removerItemDieta = (i) => {
-        const nome = historico[i].alimento.toUpperCase();
-        if(confirm(`Remover ${nome} da lista?`)) {
+        const item = historico[i].alimento.toUpperCase();
+        if(confirm(`Remover ${item} da lista?`)) {
             historico.splice(i, 1);
             localStorage.setItem('consumoProteina', JSON.stringify(historico));
             atualizarInterface();

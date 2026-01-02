@@ -4,22 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FITNESS_OS</title>
-    <style>
-        :root { --fundo: #0A0A0A; --cyan: #00E5FF; }
-        body { background-color: var(--fundo) !important; color: #FFFFFF !important; margin: 0; font-family: monospace; }
-        #app-content { padding: 10px; }
-    </style>
-    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --fundo-preto: #0A0A0A;
+            --superficie-cinza: #161616;
+            --ciano-eletrico: #00E5FF;
+            --borda-fina: #404040;
+            --fonte-mono: 'JetBrains Mono', 'Roboto Mono', monospace;
+        }
+
+        * { box-sizing: border-box; border-radius: 0px !important; }
+
+        body { 
+            background-color: var(--fundo-preto); 
+            color: #FFFFFF; 
+            font-family: var(--fonte-mono), monospace; 
+            max-width: 480px; 
+            margin: 0 auto; 
+            padding: 0;
+            font-size: 13px;
+            overflow-x: hidden;
+        }
+
+        /* Sistema de Abas */
+        .tabs { display: flex; border-bottom: 1px solid var(--borda-fina); background: #000; position: sticky; top: 0; z-index: 100; }
+        .tab-btn { 
+            flex: 1; padding: 15px; background: transparent; color: #666; 
+            border: none; cursor: pointer; text-transform: uppercase; font-size: 11px;
+        }
+        .tab-btn.active { background: var(--superficie-cinza); color: var(--ciano-eletrico); font-weight: bold; }
+
+        #app-content { padding: 10px; }
+
+        /* Cards e Layout */
+        .card { background: var(--superficie-cinza); padding: 15px; border: 1px solid var(--borda-fina); margin-bottom: 20px; }
+        h2 { font-size: 1rem; color: var(--ciano-eletrico); border-bottom: 1px solid var(--borda-fina); padding-bottom: 10px; margin-top: 0; text-transform: uppercase; }
+
+        .status-container { display: flex; border: 1px solid var(--borda-fina); margin-bottom: 15px; background: #000; }
+        .status-box { flex: 1; padding: 10px; border-right: 1px solid var(--borda-fina); }
+        .status-box:last-child { border-right: none; }
+        .status-box span { display: block; font-size: 9px; color: #888; text-transform: uppercase; }
+        .status-box strong { font-size: 1.2rem; color: var(--ciano-eletrico); }
+
+        /* Gauge SVG */
+        .gauge-container { width: 100%; display: flex; justify-content: center; padding: 15px 0; }
+        .gauge-svg { width: 220px; height: 110px; overflow: visible; }
+        .gauge-bg { stroke: #1a1a1a; stroke-width: 12; fill: none; }
+        .gauge-fill { stroke: var(--ciano-eletrico); stroke-width: 12; fill: none; stroke-dasharray: 314.15; stroke-dashoffset: 314.15; transition: stroke-dashoffset 0.5s ease; }
+
+        /* Inputs */
+        .config-meta { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 11px; }
+        .config-meta input { background: #000; color: var(--ciano-eletrico); border: 1px solid var(--borda-fina); width: 90px; padding: 8px; text-align: center; }
+
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
+        .row { display: flex; gap: 10px; }
+        select, .row input { background: #000; color: #fff; border: 1px solid var(--borda-fina); padding: 12px; font-size: 13px; flex: 1; }
+        select { flex: 2; }
+        .row input { max-width: 80px; }
+
+        .btn-add { background: var(--ciano-eletrico); color: #000; border: none; padding: 15px; font-weight: bold; width: 100%; cursor: pointer; text-transform: uppercase; }
+        .btn-reset { background: transparent; color: #666; border: 1px solid var(--borda-fina); width: 100%; padding: 10px; margin-top: 10px; cursor: pointer; font-size: 10px; }
+
+        /* Timer e Tabelas */
+        .timer-display { background: #000; border: 1px solid var(--ciano-eletrico); padding: 20px; text-align: center; margin: 15px 0; min-height: 110px; }
+        #timer-regressivo { font-size: 3rem; font-weight: bold; color: #fff; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; }
+        th { text-align: left; color: #555; border-bottom: 1px solid var(--borda-fina); padding: 5px; text-transform: uppercase; }
+        td { border-bottom: 1px solid #1a1a1a; padding: 10px 5px; }
+        .btn-del { color: #888; cursor: pointer; border: 1px solid #444; padding: 2px 6px; }
+    </style>
 </head>
 <body>
     <nav class="tabs">
         <button class="tab-btn active" data-tab="dieta">DIETA</button>
         <button class="tab-btn" data-tab="treino">TREINO</button>
     </nav>
-
     <main id="app-content"></main>
-
     <script type="module" src="js/main.js"></script>
 </body>
 </html>

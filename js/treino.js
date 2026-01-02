@@ -28,10 +28,11 @@ export function renderTreino() {
                     <div class="status-box"><span>REPS</span><strong id="ex-reps">0</strong></div>
                 </div>
                 <div id="area-timer" class="timer-display" style="display:none;">
+                    <span style="font-size:10px; color:#00E5FF">DESCANSO ATIVO</span>
                     <div id="timer-regressivo">00</div>
                 </div>
-                <button class="btn-add" id="btn-acao">PRÓXIMA SÉRIE</button>
-                <button class="btn-reset" onclick="location.reload()">ABANDONAR</button>
+                <button class="btn-add" id="btn-acao">CONCLUIR SÉRIE</button>
+                <button class="btn-reset" onclick="location.reload()">ABANDONAR TREINO</button>
             </div>
         </div>
     `;
@@ -44,7 +45,7 @@ export async function initTreino() {
         const wb = XLSX.read(new Uint8Array(ab), {type:'array'});
         const data = XLSX.utils.sheet_to_json(wb.Sheets["minha ficha"], {header: 1});
 
-        // Mapeia colunas A, D, G... para Treinos A, B, C...
+        // Mapeia colunas de 3 em 3 (Treino A, B, C...)
         for(let c=0; c < data[0].length; c+=3) {
             let nome = data[0][c];
             if(!nome) continue;
@@ -68,13 +69,23 @@ export async function initTreino() {
     });
 
     document.getElementById('btn-iniciar-treino')?.addEventListener('click', () => {
-        treinoAtivo = baseTreinos[document.getElementById('select-treino').value];
+        const escolhido = document.getElementById('select-treino').value;
+        treinoAtivo = baseTreinos[escolhido];
+        if(!treinoAtivo) return;
         document.getElementById('setup-treino').style.display = 'none';
         document.getElementById('execucao-treino').style.display = 'block';
         atualizarTela();
     });
 
-    document.getElementById('btn-acao')?.addEventListener('click', processarClique);
+    document.getElementById('btn-acao')?.addEventListener('click', () => {
+        const btn = document.getElementById('btn-acao');
+        if(btn.innerText === "CONCLUIR SÉRIE") {
+            iniciarTimer();
+        } else {
+            pararTimer();
+            avancar();
+        }
+    });
 }
 
 function atualizarTela() {
@@ -82,16 +93,6 @@ function atualizarTela() {
     document.getElementById('ex-nome').innerText = ex.nome.toUpperCase();
     document.getElementById('ex-serie').innerText = `${serieAtual} / ${ex.series}`;
     document.getElementById('ex-reps').innerText = ex.reps;
-}
-
-function processarClique() {
-    const btn = document.getElementById('btn-acao');
-    if(btn.innerText === "PRÓXIMA SÉRIE") {
-        iniciarTimer();
-    } else {
-        pararTimer();
-        avancar();
-    }
 }
 
 function iniciarTimer() {
@@ -110,7 +111,7 @@ function iniciarTimer() {
 function pararTimer() {
     clearInterval(intervalId);
     document.getElementById('area-timer').style.display = 'none';
-    document.getElementById('btn-acao').innerText = "PRÓXIMA SÉRIE";
+    document.getElementById('btn-acao').innerText = "CONCLUIR SÉRIE";
 }
 
 function avancar() {
@@ -122,7 +123,7 @@ function avancar() {
         serieAtual = 1;
     }
     if(exercicioIdx >= treinoAtivo.length) {
-        alert("TREINO FINALIZADO!");
+        alert("TREINO CONCLUÍDO!");
         location.reload();
     } else {
         atualizarTela();

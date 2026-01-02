@@ -26,6 +26,7 @@ body {
     margin: 0 auto; 
     padding: 10px;
     font-size: 13px;
+    overflow-x: hidden; /* Evita scroll lateral no mobile */
 }
 
 /* Sistema de Abas */
@@ -97,7 +98,7 @@ h2 {
     color: var(--ciano-eletrico); 
 }
 
-/* Medidor SVG (Arco) - Ajustado para não cortar */
+/* Medidor SVG */
 .gauge-container { 
     width: 100%; 
     display: flex;
@@ -126,10 +127,11 @@ h2 {
     transition: stroke-dashoffset 0.5s ease; 
 }
 
-/* Configuração da Meta (Abaixo do Gráfico) */
+/* Configuração da Meta */
 .config-meta {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* Alinhado à esquerda */
+    gap: 15px;
     align-items: center;
     margin-top: 10px;
     margin-bottom: 20px;
@@ -138,12 +140,13 @@ h2 {
 
 .config-meta input {
     background: var(--fundo-preto);
-    color: white;
+    color: var(--ciano-eletrico);
     border: 1px solid var(--borda-fina);
-    width: 42px; /* Reduzido em 30% */
-    padding: 4px;
+    width: 90px; /* Dobro do tamanho original para caber 3+ dígitos */
+    padding: 8px;
     text-align: center;
     font-family: var(--fonte-mono);
+    font-weight: bold;
 }
 
 /* Grupo de Entradas e Botões */
@@ -151,23 +154,30 @@ h2 {
 
 .row { 
     display: flex; 
-    border: 1px solid var(--borda-fina); 
-}
-
-select, .input-group input { 
-    background: var(--fundo-preto); 
-    color: white; 
-    border: none; 
-    padding: 12px; 
-    font-family: var(--fonte-mono); 
-    font-size: 14px; 
-    flex: 1; 
+    gap: 8px; /* Espaço entre dropdown e input */
 }
 
 select { 
+    background: var(--fundo-preto); 
+    color: white; 
+    border: 1px solid var(--borda-fina); 
+    padding: 12px; 
+    font-family: var(--fonte-mono); 
+    font-size: 13px; 
     flex: 2; 
-    border-right: 1px solid var(--borda-fina); 
-    max-width: 65%; 
+    min-width: 0; /* Correção para flexbox no mobile */
+}
+
+.row input {
+    background: var(--fundo-preto); 
+    color: white; 
+    border: 1px solid var(--borda-fina); 
+    padding: 12px; 
+    font-family: var(--fonte-mono); 
+    font-size: 14px; 
+    flex: 1;
+    width: 80px; /* Tamanho fixo menor para o campo de gramas */
+    min-width: 0;
 }
 
 .btn-add { 
@@ -179,7 +189,7 @@ select {
     cursor: pointer; 
     text-transform: uppercase; 
     width: 100%; 
-    margin-top: 10px; 
+    margin-top: 5px; 
 }
 
 /* Tabela de Registros */

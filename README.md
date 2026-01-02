@@ -9,6 +9,7 @@ Aplicação web modular para monitoramento de dieta (foco em proteínas via Medi
 - **Persistência de Dados:** `localStorage` do navegador.
 
 ## 📂 Estrutura de Pastas
+```text
 /
 ├── index.html          # Ponto de entrada e moldura das abas.
 ├── css/
@@ -16,11 +17,10 @@ Aplicação web modular para monitoramento de dieta (foco em proteínas via Medi
 ├── js/
 │   ├── main.js         # Orquestrador de rotas e troca de abas.
 │   ├── dieta.js        # Módulo Dieta: Lógica de proteínas e template HTML.
-│   └── treino.js       # Módulo Treino: Registro de exercícios (Em desenvolvimento).
+│   └── treino.js       # Módulo Treino: Registro de exercícios.
 └── assets/
     └── data/
         └── proteina.xlsx # Base de dados de alimentos.
-
 ## 🏗️ Arquitetura (Instruções para IA)
 Este projeto utiliza **Arquitetura Modular (ESM)**. 
 Cada funcionalidade de aba está isolada em seu próprio arquivo dentro da pasta `/js`.

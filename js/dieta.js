@@ -12,8 +12,8 @@ export function renderDieta() {
             </div>
             <div class="gauge-container">
                 <svg class="gauge-svg" viewBox="0 0 220 120">
-                    <path class="gauge-bg" fill="none" d="M 10,110 A 100,100 0 0,1 210,110" />
-                    <path id="gauge-fill" class="gauge-fill" fill="none" d="M 10,110 A 100,100 0 0,1 210,110" />
+                    <path class="gauge-bg" d="M 10,110 A 100,100 0 0,1 210,110" />
+                    <path id="gauge-fill" class="gauge-fill" d="M 10,110 A 100,100 0 0,1 210,110" />
                 </svg>
             </div>
             <div class="config-meta">
@@ -52,7 +52,7 @@ export async function initDieta() {
                 }
             });
         }
-    } catch(e) { console.error("ERRO AO CARREGAR EXCEL"); }
+    } catch(e) { console.error("ERRO EXCEL DIETA"); }
 
     document.getElementById('meta-diaria')?.addEventListener('change', (e) => {
         meta = e.target.value;
@@ -76,8 +76,7 @@ export async function initDieta() {
     });
 
     window.removerItemDieta = (i) => {
-        const item = historico[i].alimento.toUpperCase();
-        if(confirm(`Remover ${item} da lista?`)) {
+        if(confirm(`Remover ${historico[i].alimento.toUpperCase()}?`)) {
             historico.splice(i, 1);
             localStorage.setItem('consumoProteina', JSON.stringify(historico));
             atualizarInterface();
@@ -101,7 +100,8 @@ export async function initDieta() {
         document.getElementById('info-consumido').innerText = total.toFixed(1);
         document.getElementById('info-falta').innerText = Math.max(0, meta - total).toFixed(1);
         const percent = Math.min(1, total / meta);
-        document.getElementById('gauge-fill').style.strokeDashoffset = 314.15 * (1 - percent);
+        const fill = document.getElementById('gauge-fill');
+        if(fill) fill.style.strokeDashoffset = 314.15 * (1 - percent);
     }
     atualizarInterface();
 }

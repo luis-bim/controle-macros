@@ -1,68 +1,30 @@
-:root {
-    --fundo-preto: #0A0A0A;
-    --superficie-cinza: #161616;
-    --ciano-eletrico: #00E5FF;
-    --borda-fina: #404040;
-    --fonte-mono: 'JetBrains Mono', 'Roboto Mono', monospace;
+/* Estilos para a tabela de visualização de treino */
+.workout-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
 
-* { box-sizing: border-box; border-radius: 0px !important; }
-
-body { 
-    background-color: var(--fundo-preto); 
-    color: #FFFFFF; 
-    font-family: var(--fonte-mono); 
-    max-width: 480px; 
-    margin: 0 auto; 
-    font-size: 13px;
-    overflow-x: hidden;
+.workout-table th {
+    font-size: 9px;
+    color: #444;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--borda-fina);
 }
 
-/* Abas */
-.tabs { display: flex; border: 1px solid var(--borda-fina); background: #000; }
-.tab-btn { 
-    flex: 1; padding: 15px; background: transparent; color: #666; 
-    border: none; cursor: pointer; text-transform: uppercase; font-size: 11px;
-}
-.tab-btn.active { background: var(--superficie-cinza); color: var(--ciano-eletrico); font-weight: bold; }
-
-/* Medidor (SVG) - Fix para o círculo preto */
-.gauge-container { width: 100%; display: flex; justify-content: center; padding: 15px 0; }
-.gauge-svg { width: 220px; height: 120px; overflow: visible; }
-.gauge-bg { stroke: #1a1a1a; stroke-width: 12; fill: none !important; }
-.gauge-fill { 
-    stroke: var(--ciano-eletrico); stroke-width: 12; fill: none !important;
-    stroke-dasharray: 314.15; stroke-dashoffset: 314.15; 
-    transition: stroke-dashoffset 0.5s ease; 
+.workout-table td {
+    padding: 8px 4px;
+    font-size: 11px;
+    border-bottom: 1px solid #1a1a1a;
 }
 
-/* Containers */
-.card { background: var(--superficie-cinza); padding: 15px; border: 1px solid var(--borda-fina); margin-top: 10px; }
-h2 { font-size: 1rem; color: var(--ciano-eletrico); border-bottom: 1px solid var(--borda-fina); padding-bottom: 10px; margin-top: 0; }
-
-.status-container { display: flex; border: 1px solid var(--borda-fina); margin-bottom: 15px; }
-.status-box { flex: 1; padding: 10px; border-right: 1px solid var(--borda-fina); }
-.status-box:last-child { border-right: none; }
-.status-box span { display: block; font-size: 9px; color: #888; text-transform: uppercase; }
-.status-box strong { font-size: 1.2rem; color: var(--ciano-eletrico); }
-
-/* Inputs e Meta */
-.config-meta { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 11px; }
-.config-meta input { background: #000; color: var(--ciano-eletrico); border: 1px solid var(--borda-fina); width: 90px; padding: 8px; text-align: center; }
-
-.input-group { display: flex; flex-direction: column; gap: 10px; }
-.row { display: flex; gap: 10px; }
-select, .row input { background: #000; color: #fff; border: 1px solid var(--borda-fina); padding: 12px; font-size: 13px; }
-select { flex: 2; }
-.row input { width: 85px; }
-
-.btn-add { background: var(--ciano-eletrico); color: #000; border: none; padding: 15px; font-weight: bold; width: 100%; cursor: pointer; text-transform: uppercase; }
-.timer-display { background: #000; border: 1px solid var(--ciano-eletrico); padding: 25px; text-align: center; margin: 15px 0; }
-#timer-regressivo { font-size: 3.5rem; font-weight: bold; display: block; }
-
-/* Tabela */
-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-th { text-align: left; font-size: 10px; color: #888; border-bottom: 1px solid var(--borda-fina); padding: 5px; }
-td { border-bottom: 1px solid var(--borda-fina); padding: 12px 5px; }
-.btn-del { color: #666; cursor: pointer; border: 1px solid var(--borda-fina); padding: 2px 8px; }
-.btn-reset { background: transparent; color: #666; border: 1px solid var(--borda-fina); width: 100%; padding: 10px; margin-top: 20px; cursor: pointer; font-size: 10px; }
+/* Garante que o timer não mova o layout */
+.timer-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    border: 1px solid var(--ciano-eletrico);
+}

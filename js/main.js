@@ -1,29 +1,24 @@
 import { renderDieta, initDieta } from './dieta.js';
+import { renderTreino, initTreino } from './treino.js';
 
 const app = document.getElementById('app-content');
+const buttons = document.querySelectorAll('.tab-btn');
 
-function loadTab(tabName) {
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tabName);
-    });
+function navigateTo(tabId) {
+    buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
 
-    if (tabName === 'dieta') {
+    if (tabId === 'dieta') {
         app.innerHTML = renderDieta();
         initDieta();
-    } else if (tabName === 'treino') {
-        app.innerHTML = `
-            <div class="card">
-                <h2>REGISTRO DE TREINO</h2>
-                <div style="text-align: center; color: #444; padding: 40px 0; border: 1px dashed var(--borda-fina);">
-                    MÓDULO EM DESENVOLVIMENTO
-                </div>
-            </div>`;
+    } else {
+        app.innerHTML = renderTreino();
+        initTreino();
     }
 }
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => loadTab(btn.dataset.tab));
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => navigateTo(btn.dataset.tab));
 });
 
-// Inicialização
-loadTab('dieta');
+// Inicia na Dieta
+navigateTo('dieta');

@@ -5,7 +5,7 @@ let meta = localStorage.getItem('metaProteina') || 150;
 export function renderDieta() {
     return `
         <div class="card">
-            <h2>MEDIDOR DE PROTEINA</h2>
+            <h2>MEDIDOR DE PROTEINA CONSUMIDA</h2>
             <div class="status-container">
                 <div class="status-box"><span>CONSUMIDO</span><strong id="info-consumido">0.0</strong></div>
                 <div class="status-box"><span>RESTANTE</span><strong id="info-falta">0.0</strong></div>
@@ -76,9 +76,12 @@ export async function initDieta() {
     });
 
     window.removerItemDieta = (i) => {
-        historico.splice(i, 1);
-        localStorage.setItem('consumoProteina', JSON.stringify(historico));
-        atualizarInterface();
+        const nomeItem = historico[i].alimento.toUpperCase();
+        if(confirm(`Remover ${nomeItem} da lista?`)) {
+            historico.splice(i, 1);
+            localStorage.setItem('consumoProteina', JSON.stringify(historico));
+            atualizarInterface();
+        }
     };
 
     function atualizarInterface() {
